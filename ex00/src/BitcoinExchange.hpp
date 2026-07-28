@@ -11,7 +11,6 @@ private:
 
   float getRate(const std::string &date) const;
   bool isValidDate(const std::string &date) const;
-  bool isValidValue(const std::string &value) const;
 
 public:
   BitcoinExchange();

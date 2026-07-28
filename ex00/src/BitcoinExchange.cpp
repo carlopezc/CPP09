@@ -46,21 +46,7 @@ bool BitcoinExchange::isValidDate(const std::string &date) const {
   return true;
 }
 
-bool BitcoinExchange::isValidValue(const std::string &value) const {
-  double val;
-  std::istringstream iss(value);
-  if (!(iss >> val))
-    return false;
-  if (val < 0) {
-    std::cerr << "Error: not a positive number." << std::endl;
-    return false;
-  }
-  if (val > 1000) {
-    std::cerr << "Error: too large a number." << std::endl;
-    return false;
-  }
-  return true;
-}
+
 
 void BitcoinExchange::processInput(const std::string &filename) {
   std::ifstream file(filename);
@@ -81,15 +67,22 @@ void BitcoinExchange::processInput(const std::string &filename) {
         std::cerr << "Error: bad input => " << line << std::endl;
         continue;
       }
-      if (!isValidValue(value))
-        continue;
-
       double val;
       std::istringstream iss(value);
-      iss >> val;
+      if (!(iss >> val)) {
+        std::cerr << "Error: bad input => " << line << std::endl;
+        continue;
+      }
+      if (val < 0) {
+        std::cerr << "Error: not a positive number." << std::endl;
+        continue;
+      }
+      if (val > 1000) {
+        std::cerr << "Error: too large a number." << std::endl;
+        continue;
+      }
       float rate = getRate(date);
-      std::cout << date << " => " << value << " = " << rate * val
-                << std::endl;
+      std::cout << date << " => " << value << " = " << rate * val << std::endl;
     }
   } else {
     throw std::runtime_error("Error opening file");

@@ -1,4 +1,4 @@
-NAME		= btc
+NAME		= easyfind
 
 #********************************************************************************#
 
@@ -14,7 +14,7 @@ DDIR		= deps
 
 #***********************************************x*********************************#
 
-SRC			= src/main.cpp src/BitcoinExchange.cpp
+SRC			= src/main.cpp
 HEADER		= src/BitcoinExchange.hpp
 
 OBJ			= $(SRC:%.cpp=$(ODIR)/%.o)
