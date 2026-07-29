@@ -1,4 +1,4 @@
-NAME		= easyfind
+NAME		= RPN
 
 #********************************************************************************#
 
@@ -14,8 +14,8 @@ DDIR		= deps
 
 #***********************************************x*********************************#
 
-SRC			= src/main.cpp
-HEADER		= src/BitcoinExchange.hpp
+SRC			= src/main.cpp src/RPN.cpp
+HEADER		= src/RPN.hpp
 
 OBJ			= $(SRC:%.cpp=$(ODIR)/%.o)
 DEPS		= $(OBJ:%.o=$(DDIR)/%.d)
@@ -26,7 +26,7 @@ all : $(NAME)
 
 $(NAME) : Makefile $(OBJ)| $(ODIR) $(DDIR)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
-	@echo "\033[32m ✌ CPP09 EX00 COMPILED!\033[0m"
+	@echo "\033[32m ✌ CPP09 EX01 COMPILED!\033[0m"
 
 $(ODIR) $(DDIR):
 	@mkdir -p $@
