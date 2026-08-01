@@ -18,7 +18,6 @@ int main(int argc, char **argv) {
     std::cerr << "Error" << std::endl;
     return 1;
   }
-  
   try {
     PmergeMe p(argc, argv);
     p.run();

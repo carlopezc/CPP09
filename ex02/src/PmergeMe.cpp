@@ -6,7 +6,7 @@
 /*   By: carlopez <carlopez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 16:19:45 by carlopez          #+#    #+#             */
-/*   Updated: 2026/08/01 16:19:50 by carlopez         ###   ########.fr       */
+/*   Updated: 2026/08/01 18:04:08 by carlopez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ size_t binarySearch(const std::deque<int> &deq, int value, size_t high) {
   return left;
 }
 
-std::vector<std::pair<int, int>>
+std::vector<std::pair<int, int> >
 PmergeMe::generatePairs(std::vector<int> &vec) {
-  std::vector<std::pair<int, int>> pairs;
+  std::vector<std::pair<int, int> > pairs;
   for (size_t i = 0; i < vec.size(); i += 2) {
     int bigger = std::max(vec[i], vec[i + 1]);
     int smaller = std::min(vec[i], vec[i + 1]);
@@ -92,8 +92,8 @@ PmergeMe::generatePairs(std::vector<int> &vec) {
   return pairs;
 }
 
-std::deque<std::pair<int, int>> PmergeMe::generatePairs(std::deque<int> &deq) {
-  std::deque<std::pair<int, int>> pairs;
+std::deque<std::pair<int, int> > PmergeMe::generatePairs(std::deque<int> &deq) {
+  std::deque<std::pair<int, int> > pairs;
   for (size_t i = 0; i < deq.size(); i += 2) {
     int bigger = std::max(deq[i], deq[i + 1]);
     int smaller = std::min(deq[i], deq[i + 1]);
@@ -104,7 +104,7 @@ std::deque<std::pair<int, int>> PmergeMe::generatePairs(std::deque<int> &deq) {
 
 std::vector<int>
 PmergeMe::realignPend(const std::vector<int> &main_pairs,
-                      const std::vector<std::pair<int, int>> &pairs) {
+                      const std::vector<std::pair<int, int> > &pairs) {
   std::vector<int> sorted_pend;
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
@@ -119,7 +119,7 @@ PmergeMe::realignPend(const std::vector<int> &main_pairs,
 
 std::deque<int>
 PmergeMe::realignPend(const std::deque<int> &main_pairs,
-                      const std::deque<std::pair<int, int>> &pairs) {
+                      const std::deque<std::pair<int, int> > &pairs) {
   std::deque<int> sorted_pend;
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
@@ -208,7 +208,7 @@ void PmergeMe::sortVector(std::vector<int> &vec) {
     hasLeftover = true;
   }
 
-  std::vector<std::pair<int, int>> pairs = generatePairs(vec);
+  std::vector<std::pair<int, int> > pairs = generatePairs(vec);
 
   std::vector<int> main_pairs;
   for (size_t i = 0; i < pairs.size(); i++) {
@@ -250,7 +250,7 @@ void PmergeMe::sortDeque(std::deque<int> &deq) {
     hasLeftover = true;
   }
 
-  std::deque<std::pair<int, int>> pairs = generatePairs(deq);
+  std::deque<std::pair<int, int> > pairs = generatePairs(deq);
   std::deque<int> main_pairs;
   for (size_t i = 0; i < pairs.size(); i++) {
     main_pairs.push_back(pairs[i].first);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: carlopez <carlopez@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/01 18:00:05 by carlopez          #+#    #+#             */
+/*   Updated: 2026/08/01 18:00:08 by carlopez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "BitcoinExchange.hpp"
 #include <fstream>
 #include <iostream>
@@ -42,6 +54,36 @@ bool BitcoinExchange::isValidDate(const std::string &date) const {
     return false;
   if (date[4] != '-' || date[7] != '-')
     return false;
+
+  for (int i = 0; i < 10; i++) {
+    if (i == 4 || i == 7)
+      continue;
+    if (date[i] < '0' || date[i] > '9')
+      return false;
+  }
+
+  int year, month, day;
+  std::istringstream y_ss(date.substr(0, 4));
+  std::istringstream m_ss(date.substr(5, 2));
+  std::istringstream d_ss(date.substr(8, 2));
+
+  if (!(y_ss >> year) || !(m_ss >> month) || !(d_ss >> day))
+    return false;
+
+  if (year < 2008 || month < 1 || month > 12 || day < 1)
+    return false;
+
+  int maxDays = 31;
+  if (month == 4 || month == 6 || month == 9 || month == 11) {
+    maxDays = 30;
+  } else if (month == 2) {
+    bool isLeap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+    maxDays = isLeap ? 29 : 28;
+  }
+
+  if (day > maxDays)
+    return false;
+
   return true;
 }
 
