@@ -27,10 +27,13 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
   return *this;
 }
 
+// Procesa y valida los argumentos de entrada de la línea de comandos
 void PmergeMe::parseInput(int argc, char **argv) {
   for (int i = 1; i < argc; i++) {
     char *end;
     long num = std::strtol(argv[i], &end, 10);
+    // Valida que no queden caracteres residuales, que sea positivo y que no
+    // supere INT_MAX
     if (*end != '\0' || num <= 0 || num > INT_MAX) {
       throw std::runtime_error("Invalid input");
     }
@@ -39,6 +42,7 @@ void PmergeMe::parseInput(int argc, char **argv) {
   }
 }
 
+// Búsqueda binaria clásica en std::vector
 size_t binarySearch(const std::vector<int> &vec, int value, size_t high) {
   size_t left = 0;
   size_t right = high;
@@ -54,6 +58,7 @@ size_t binarySearch(const std::vector<int> &vec, int value, size_t high) {
   return left;
 }
 
+// Búsqueda binaria clásica en std::deque
 size_t binarySearch(const std::deque<int> &deq, int value, size_t high) {
   size_t left = 0;
   size_t right = high;
@@ -69,9 +74,10 @@ size_t binarySearch(const std::deque<int> &deq, int value, size_t high) {
   return left;
 }
 
-std::vector<std::pair<int, int> >
+// Genera parejas ordenadas a partir de un std::vector
+std::vector<std::pair<int, int>>
 PmergeMe::generatePairs(std::vector<int> &vec) {
-  std::vector<std::pair<int, int> > pairs;
+  std::vector<std::pair<int, int>> pairs;
   for (size_t i = 0; i < vec.size(); i += 2) {
     int bigger = std::max(vec[i], vec[i + 1]);
     int smaller = std::min(vec[i], vec[i + 1]);
@@ -80,8 +86,9 @@ PmergeMe::generatePairs(std::vector<int> &vec) {
   return pairs;
 }
 
-std::deque<std::pair<int, int> > PmergeMe::generatePairs(std::deque<int> &deq) {
-  std::deque<std::pair<int, int> > pairs;
+// Genera parejas ordenadas a partir de un std::deque
+std::deque<std::pair<int, int>> PmergeMe::generatePairs(std::deque<int> &deq) {
+  std::deque<std::pair<int, int>> pairs;
   for (size_t i = 0; i < deq.size(); i += 2) {
     int bigger = std::max(deq[i], deq[i + 1]);
     int smaller = std::min(deq[i], deq[i + 1]);
@@ -90,9 +97,11 @@ std::deque<std::pair<int, int> > PmergeMe::generatePairs(std::deque<int> &deq) {
   return pairs;
 }
 
+// Realinea la cadena pend (elementos menores) para que coincida con el orden de
+// la cadena principal ordenada
 std::vector<int>
 PmergeMe::realignPend(const std::vector<int> &main_pairs,
-                      const std::vector<std::pair<int, int> > &pairs) {
+                      const std::vector<std::pair<int, int>> &pairs) {
   std::vector<int> sorted_pend;
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
@@ -105,9 +114,10 @@ PmergeMe::realignPend(const std::vector<int> &main_pairs,
   return sorted_pend;
 }
 
+// Realinea la cadena pend (elementos menores) para std::deque
 std::deque<int>
 PmergeMe::realignPend(const std::deque<int> &main_pairs,
-                      const std::deque<std::pair<int, int> > &pairs) {
+                      const std::deque<std::pair<int, int>> &pairs) {
   std::deque<int> sorted_pend;
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
@@ -120,6 +130,7 @@ PmergeMe::realignPend(const std::deque<int> &main_pairs,
   return sorted_pend;
 }
 
+// Genera la secuencia de Jacobsthal: J(n) = J(n-1) + 2 * J(n-2)
 std::vector<size_t> PmergeMe::generateJacobs(size_t limit) {
   std::vector<size_t> jacob;
   jacob.push_back(1);
@@ -131,6 +142,9 @@ std::vector<size_t> PmergeMe::generateJacobs(size_t limit) {
   return jacob;
 }
 
+// Determina el orden exacto de inserción a partir de los números de Jacobsthal.
+// Por ejemplo, para el grupo 3, insertará desde el índice 3 hacia abajo hasta
+// el anterior + 1.
 std::vector<size_t>
 PmergeMe::generateInsertOrder(const std::vector<size_t> &jacob, size_t size) {
   std::vector<size_t> insert_order;
@@ -148,6 +162,8 @@ PmergeMe::generateInsertOrder(const std::vector<size_t> &jacob, size_t size) {
   return insert_order;
 }
 
+// Realiza las inserciones binarias de la secuencia pend en la cadena final vec
+// (std::vector)
 void PmergeMe::insertPend(std::vector<int> &vec,
                           const std::vector<int> &main_pairs,
                           const std::vector<int> &sorted_pend,
@@ -156,6 +172,8 @@ void PmergeMe::insertPend(std::vector<int> &vec,
     size_t idx = insert_order[i];
     int val = sorted_pend[idx];
 
+    // Limita la búsqueda binaria hasta la posición actual de su pareja en el
+    // main chain
     std::vector<int>::iterator it =
         std::find(vec.begin(), vec.end(), main_pairs[idx]);
     size_t limit = std::distance(vec.begin(), it);
@@ -165,6 +183,8 @@ void PmergeMe::insertPend(std::vector<int> &vec,
   }
 }
 
+// Realiza las inserciones binarias de la secuencia pend en la cadena final deq
+// (std::deque)
 void PmergeMe::insertPend(std::deque<int> &deq,
                           const std::deque<int> &main_pairs,
                           const std::deque<int> &sorted_pend,
@@ -173,6 +193,8 @@ void PmergeMe::insertPend(std::deque<int> &deq,
     size_t idx = insert_order[i];
     int val = sorted_pend[idx];
 
+    // Limita la búsqueda binaria hasta la posición actual de su pareja en el
+    // main chain
     std::deque<int>::iterator it =
         std::find(deq.begin(), deq.end(), main_pairs[idx]);
     size_t limit = std::distance(deq.begin(), it);
@@ -182,11 +204,14 @@ void PmergeMe::insertPend(std::deque<int> &deq,
   }
 }
 
+// Algoritmo Ford-Johnson (Merge-Insertion Sort) para std::vector
 void PmergeMe::sortVector(std::vector<int> &vec) {
   if (vec.size() <= 1) {
     return;
   }
 
+  // Si el tamaño es impar, extraemos el último elemento temporalmente
+  // (leftover)
   int leftoverVal = -1;
   bool hasLeftover = false;
   if (vec.size() % 2 != 0) {
@@ -195,40 +220,53 @@ void PmergeMe::sortVector(std::vector<int> &vec) {
     hasLeftover = true;
   }
 
-  std::vector<std::pair<int, int> > pairs = generatePairs(vec);
+  // Paso 1: Agrupar y ordenar parejas
+  std::vector<std::pair<int, int>> pairs = generatePairs(vec);
 
+  // Extraer cadena principal (mayores de cada pareja)
   std::vector<int> main_pairs;
   for (size_t i = 0; i < pairs.size(); i++) {
     main_pairs.push_back(pairs[i].first);
   }
 
+  // Paso 2: Llamada recursiva sobre la cadena principal
   sortVector(main_pairs);
 
+  // Paso 3 (Preparativo): Alinear los menores con los mayores ordenados
   std::vector<int> sorted_pend = realignPend(main_pairs, pairs);
 
+  // Inicializar vec final con el primer elemento menor y la cadena principal
+  // ordenada
   vec.clear();
   vec.push_back(sorted_pend[0]);
   for (size_t i = 0; i < main_pairs.size(); i++) {
     vec.push_back(main_pairs[i]);
   }
 
+  // Generar secuencia de Jacobsthal y definir orden de inserciones
   std::vector<size_t> jacob = generateJacobs(sorted_pend.size());
   std::vector<size_t> insert_order =
       generateInsertOrder(jacob, sorted_pend.size());
 
+  // Insertar de manera binaria optimizada
   insertPend(vec, main_pairs, sorted_pend, insert_order);
 
+  // Paso final: Insertar el elemento sobrante (leftover) de forma binaria si
+  // existía
   if (hasLeftover) {
     size_t pos = binarySearch(vec, leftoverVal, vec.size());
     vec.insert(vec.begin() + pos, leftoverVal);
   }
 }
 
+// Algoritmo Ford-Johnson (Merge-Insertion Sort) para std::deque
 void PmergeMe::sortDeque(std::deque<int> &deq) {
   if (deq.size() <= 1) {
     return;
   }
 
+  // Si el tamaño es impar, extraemos el último elemento temporalmente
+  // (leftover)
   int leftoverVal = -1;
   bool hasLeftover = false;
   if (deq.size() % 2 != 0) {
@@ -237,60 +275,85 @@ void PmergeMe::sortDeque(std::deque<int> &deq) {
     hasLeftover = true;
   }
 
-  std::deque<std::pair<int, int> > pairs = generatePairs(deq);
+  // Paso 1: Agrupar y ordenar parejas
+  std::deque<std::pair<int, int>> pairs = generatePairs(deq);
 
+  // Extraer cadena principal (mayores de cada pareja)
   std::deque<int> main_pairs;
   for (size_t i = 0; i < pairs.size(); i++) {
     main_pairs.push_back(pairs[i].first);
   }
 
+  // Paso 2: Llamada recursiva sobre la cadena principal
   sortDeque(main_pairs);
 
+  // Paso 3 (Preparativo): Alinear los menores con los mayores ordenados
   std::deque<int> sorted_pend = realignPend(main_pairs, pairs);
 
+  // Inicializar deq final con el primer elemento menor y la cadena principal
+  // ordenada
   deq.clear();
   deq.push_back(sorted_pend[0]);
   for (size_t i = 0; i < main_pairs.size(); i++) {
     deq.push_back(main_pairs[i]);
   }
 
+  // Generar secuencia de Jacobsthal y definir orden de inserciones
   std::vector<size_t> jacob = generateJacobs(sorted_pend.size());
   std::vector<size_t> insert_order =
       generateInsertOrder(jacob, sorted_pend.size());
 
+  // Insertar de manera binaria optimizada
   insertPend(deq, main_pairs, sorted_pend, insert_order);
 
+  // Paso final: Insertar el elemento sobrante (leftover) de forma binaria si
+  // existía
   if (hasLeftover) {
     size_t pos = binarySearch(deq, leftoverVal, deq.size());
     deq.insert(deq.begin() + pos, leftoverVal);
   }
 }
 
-void PmergeMe::run() {
-  std::cout << "Before: ";
-  for (size_t i = 0; i < _vec.size(); i++) {
-    std::cout << _vec[i] << (i + 1 == _vec.size() ? "" : " ");
+void printCont(int type, const std::vector<int> &vec) {
+  if (type == 1) {
+    std::cout << "Before: ";
+  } else {
+    std::cout << "After:  ";
+  }
+  for (size_t i = 0; i < vec.size(); i++) {
+    std::cout << vec[i] << (i + 1 == vec.size() ? "" : " ");
   }
   std::cout << std::endl;
+}
 
+// Controla la visualización del flujo completo, las salidas ordenadas y las
+// mediciones de tiempo.
+void PmergeMe::run() {
+  printCont(1, this->_vec);
+
+  // Medir ordenación con std::vector
+  // std::clock_T devuelve cuantos clock ticks ha consumido nuestro proceso
+  // actual
   std::clock_t startVec = std::clock();
   sortVector(_vec);
   std::clock_t endVec = std::clock();
+  // CLOCKS_PER_SEC es una macro del sistema que indica cuantos ticks de CPU
+  // equivalen a un segundo
+  //  * 1e6 lo convertimos a milisegudos
+  // lo guardamos en double para no descartar los decimales
   double timeVec =
       static_cast<double>(endVec - startVec) / CLOCKS_PER_SEC * 1e6;
 
+  // Medir ordenación con std::deque
   std::clock_t startDeq = std::clock();
   sortDeque(_deq);
   std::clock_t endDeq = std::clock();
   double timeDeq =
       static_cast<double>(endDeq - startDeq) / CLOCKS_PER_SEC * 1e6;
 
-  std::cout << "After:  ";
-  for (size_t i = 0; i < _vec.size(); i++) {
-    std::cout << _vec[i] << (i + 1 == _vec.size() ? "" : " ");
-  }
-  std::cout << std::endl;
+  printCont(2, this->_vec);
 
+  // Imprime los resultados con el formato idéntico al enunciado del subject
   std::cout << "Time to process a range of " << _vec.size()
             << " elements with std::vector : " << timeVec << " us" << std::endl;
   std::cout << "Time to process a range of " << _deq.size()
