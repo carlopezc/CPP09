@@ -94,10 +94,12 @@ std::vector<int>
 PmergeMe::realignPend(const std::vector<int> &main_pairs,
                       const std::vector<std::pair<int, int> > &pairs) {
   std::vector<int> sorted_pend;
+  std::vector<bool> used(pairs.size(), false);
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
-      if (pairs[j].first == main_pairs[i]) {
+      if (!used[j] && pairs[j].first == main_pairs[i]) {
         sorted_pend.push_back(pairs[j].second);
+        used[j] = true;
         break;
       }
     }
@@ -109,10 +111,12 @@ std::deque<int>
 PmergeMe::realignPend(const std::deque<int> &main_pairs,
                       const std::deque<std::pair<int, int> > &pairs) {
   std::deque<int> sorted_pend;
+  std::vector<bool> used(pairs.size(), false);
   for (size_t i = 0; i < main_pairs.size(); i++) {
     for (size_t j = 0; j < pairs.size(); j++) {
-      if (pairs[j].first == main_pairs[i]) {
+      if (!used[j] && pairs[j].first == main_pairs[i]) {
         sorted_pend.push_back(pairs[j].second);
+        used[j] = true;
         break;
       }
     }
