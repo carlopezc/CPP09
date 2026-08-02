@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PmergeMe.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: carlopez <carlopez@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/01 16:19:45 by carlopez          #+#    #+#             */
+/*   Updated: 2026/08/01 18:04:08 by carlopez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PmergeMe.hpp"
 #include <algorithm>
 #include <climits>
@@ -177,6 +189,7 @@ void PmergeMe::insertPend(std::deque<int> &deq,
     size_t idx = insert_order[i];
     int val = sorted_pend[idx];
 
+
     std::deque<int>::iterator it =
         std::find(deq.begin(), deq.end(), main_pairs[idx]);
     size_t limit = std::distance(deq.begin(), it);
@@ -207,7 +220,7 @@ void PmergeMe::sortVector(std::vector<int> &vec) {
   }
 
   sortVector(main_pairs);
-
+ 
   std::vector<int> sorted_pend = realignPend(main_pairs, pairs);
 
   vec.clear();
@@ -242,7 +255,6 @@ void PmergeMe::sortDeque(std::deque<int> &deq) {
   }
 
   std::deque<std::pair<int, int> > pairs = generatePairs(deq);
-
   std::deque<int> main_pairs;
   for (size_t i = 0; i < pairs.size(); i++) {
     main_pairs.push_back(pairs[i].first);
@@ -252,11 +264,13 @@ void PmergeMe::sortDeque(std::deque<int> &deq) {
 
   std::deque<int> sorted_pend = realignPend(main_pairs, pairs);
 
+
   deq.clear();
   deq.push_back(sorted_pend[0]);
   for (size_t i = 0; i < main_pairs.size(); i++) {
     deq.push_back(main_pairs[i]);
   }
+
 
   std::vector<size_t> jacob = generateJacobs(sorted_pend.size());
   std::vector<size_t> insert_order =

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: carlopez <carlopez@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/01 18:00:05 by carlopez          #+#    #+#             */
+/*   Updated: 2026/08/01 18:00:08 by carlopez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "BitcoinExchange.hpp"
 #include <fstream>
 #include <iostream>
@@ -15,11 +27,10 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other) {
 }
 
 BitcoinExchange::BitcoinExchange(const std::string &dbFile) {
-  std::ifstream file(dbFile);
+  std::ifstream file(dbFile.c_str());
   std::string line;
 
   if (file.is_open()) {
-    // Skipping first line with the header
     std::getline(file, line);
     while (std::getline(file, line)) {
       size_t pos = line.find(',');
@@ -79,7 +90,7 @@ bool BitcoinExchange::isValidDate(const std::string &date) const {
 
 
 void BitcoinExchange::processInput(const std::string &filename) {
-  std::ifstream file(filename);
+  std::ifstream file(filename.c_str());
   std::string line;
   if (file.is_open()) {
     std::getline(file, line);
